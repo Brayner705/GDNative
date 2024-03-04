@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <title>GD</title>
+</head>
+<body>
+    <div class="fondo">
+        <button class='boton1'>Barra</button>
+        <div class="cuadro_datos">
+
+          <!------------------------SALDO---------------------------->
+
+          <div class='cuadro Saldo'>
+            <h3>Saldo</h3>
+            <h4>0</h4>     
+            <button id="btnVer" value="saldo">Ver mas</button>
+
+          </div>
+
+          <!------------------------PENDIENTE---------------------------->
+
+          <div class='cuadro Pendiente'>
+            <h3>Pendiente</h3>
+            <h4>0</h4>
+            <button id="btnVer" value="pendiente">Ver mas</button>
+
+
+          </div>
+
+          <!-------------------------AHORRO--------------------------->
+
+          <div class='cuadro Ahorro'>
+            <h3>Ahorro</h3>
+            <h4>0</h4>
+            <button id="btnVer" value="ahorro">Ver mas</button>
+
+
+          </div>
+
+          <!------------------------DEUDA---------------------------->
+
+          <div class='cuadro Deuda'>
+            <h3>Deuda</h3>
+            <h4>0</h4>
+            <button id="btnVer" value="deuda">Ver mas</button>
+          </div>
+
+         <!---------------------------------------------------->
+
+        </div>
+        <button class='boton2'>user</button>
+        
+      </div>
+
+      <div id="modal">
+        <div class="ventana">
+            <button id="exit">X</button>
+            <div class="saldo" id="saldo">
+              <h2 id="titleModal"></h2>
+              <input type="text" id="agregar">
+              <input type="text" placeholder="Asunto">
+              <button id="agregarSaldo">Agregar</button>
+            </div>
+        </div>
+      </div>
+
+</body>
+
+<script src="scripts/main.js"></script>
+<script src="https://kit.fontawesome.com/830f4ca4e4.js" crossorigin="anonymous"></script>
+</html>
