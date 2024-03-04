@@ -15,7 +15,8 @@ btns.forEach(function(btn){
     btn.addEventListener('click', ()=>{
         modalS.classList.add('modal');
         ventanaS.style.display = 'flex'
-        
+        ventanaM.style.height = '50vh';
+
         let opcion = btn.getAttribute('value');
         
         inputOne.setAttribute('placeholder',`Ingresa ${opcion}`)
@@ -27,6 +28,9 @@ btns.forEach(function(btn){
 exit.addEventListener('click', ()=>{
     modalS.classList.remove('modal');
     ventanaS.style.display = 'none';
+    ventanaM.style.height = '0';
+
+
 })
 
 agregarMonto.addEventListener('click',()=>{
