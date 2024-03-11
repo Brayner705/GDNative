@@ -7,8 +7,27 @@
     <title>GD</title>
 </head>
 <body>
+
+
+  <div class="fondoVentana" id="fondoVentana">
+  </div>
+  <div class="ventanaLateral" id="ventanaL">
+
+    <div class="apartados">
+      <h3>Apartados <i id="down" class="fa fa-angle-right"></i></h3>
+      <div class="apartadosDown" id="addE">
+        <a href="#" class="add" >+</a>
+        <a href="#">Personal</a>
+
+      </div>
+      <a href="#" class="contacto">Contacto</a>
+    </div>
+
+  </div>
+
+
     <div class="fondo">
-        <button class='boton1'>Barra</button>
+        <button class='boton1' id="btnL"><i class="fa fa-bars bars"></i></button>
         <div class="cuadro_datos">
 
           <!------------------------SALDO---------------------------->
@@ -51,7 +70,7 @@
          <!---------------------------------------------------->
 
         </div>
-        <button class='boton2'>user</button>
+        <button id="user" class='boton2'><i class="fa fa-user user"></i></button>
         
       </div>
       
@@ -71,7 +90,7 @@
 
 
 
-      <div class="historial">
+      <div class="historial" id="contenedorHistorial">
         <h3>Historial</h3>
         <div class="cajaHistorial">
           <h5>Asunto</h5>
@@ -79,43 +98,24 @@
           <h5>Fecha</h5>
         </div>
         
-        <div class="cajaHistorial historialM">
-          <h5>Sueldo</h5>
-          <h5>300</h5>
-          <h5>01/03/2024</h5>
-        </div>
+      </div>
 
-        <div class="cajaHistorial historialM">
-          <h5>Sueldo</h5>
-          <h5>300</h5>
-          <h5>01/03/2024</h5>
+      <div class="deuda" id="contenedorDeuda">
+        <h3>Deuda</h3>
+        <div class="cajaDeuda">
+          <h5>Asunto</h5>
+          <h5>Monto</h5>
+          <h5>Fecha</h5>
+          
         </div>
-
-        <div class="cajaHistorial historialM">
-          <h5>Sueldo</h5>
-          <h5>300</h5>
-          <h5>01/03/2024</h5>
-        </div>
-        <div class="cajaHistorial historialM">
-          <h5>Sueldo</h5>
-          <h5>300</h5>
-          <h5>01/03/2024</h5>
-        </div>
-        <div class="cajaHistorial historialM">
-          <h5>Sueldo</h5>
-          <h5>300</h5>
-          <h5>01/03/2024</h5>
-        </div>
-        <div class="cajaHistorial historialM">
-          <h5>Sueldo</h5>
-          <h5>300</h5>
-          <h5>01/03/2024</h5>
-        </div>
+        
       </div>
       
-
 </body>
 
 <script src="scripts/main.js"></script>
+<script src="scripts/historial.js"></script>
+<script src="scripts/deuda.js"></script>
+<script src="scripts/apartados.js"></script>
 <script src="https://kit.fontawesome.com/830f4ca4e4.js" crossorigin="anonymous"></script>
 </html>
