@@ -37,9 +37,6 @@ exit.addEventListener('click', ()=>{
 agregarMonto.addEventListener('click',()=>{
     modalS.classList.remove('modal');
     ventanaS.style.display = 'none';
-
-    
-
 })
 
 /**             Bars                     */
