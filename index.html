@@ -21,6 +21,7 @@
 
       </div>
       <a href="#" class="contacto">Contacto</a>
+      <a href="#" id="limpiar" class="contacto">limpiar</a>
     </div>
 
   </div>
@@ -34,7 +35,7 @@
 
           <div class='cuadro Saldo'>
             <h3>Saldo</h3>
-            <h4>0</h4>     
+            <h4 id="vistaSaldo">0</h4>     
             <button id="btnVer" value="saldo">Ver mas</button>
 
           </div>
@@ -43,7 +44,7 @@
 
           <div class='cuadro Pendiente'>
             <h3>Pendiente</h3>
-            <h4>0</h4>
+            <h4 id="vistaPendiente">0</h4>
             <button id="btnVer" value="pendiente">Ver mas</button>
 
 
@@ -53,7 +54,7 @@
 
           <div class='cuadro Ahorro'>
             <h3>Ahorro</h3>
-            <h4>0</h4>
+            <h4 id="vistaAhorro">0</h4>
             <button id="btnVer" value="ahorro">Ver mas</button>
 
 
@@ -63,7 +64,7 @@
 
           <div class='cuadro Deuda'>
             <h3>Deuda</h3>
-            <h4>0</h4>
+            <h4 id="vistaDeuda">0</h4>
             <button id="btnVer" value="deuda">Ver mas</button>
           </div>
 
@@ -82,8 +83,7 @@
             <div class="saldo" id="saldo">
               <h2 id="titleModal"></h2>
               <input type="number" id="agregar">
-              <input type="text" placeholder="Asunto">
-              <button id="agregarSaldo">Agregar</button>
+              <input type="text" placeholder="Asunto" id="asunto">
             </div>
         </div>
       </div>

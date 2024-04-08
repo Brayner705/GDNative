@@ -1,8 +1,6 @@
 const arrowDown = document.getElementById('down');
 const add = document.getElementById('addE');
 
-console.log(add)
-
 let click = false
 
 arrowDown.addEventListener('click',()=>{
