@@ -1,3 +1,5 @@
+
+
 if(!localStorage.getItem('primeraVisita')){
     alert('Bienvenido a primera vez a nuestra pagina');
 
@@ -7,6 +9,86 @@ if(!localStorage.getItem('primeraVisita')){
     localStorage.setItem('ahorro','0');
     localStorage.setItem('deuda','0');
 }
+
+const insertarDatos = document.getElementById('contenedorHistorial');
+
+const crearBloque = (asunto,monto)=>{
+    
+    let fecha = new Date();
+    const div = document.createElement('DIV');
+    div.classList.add('cajaHistorial');
+    div.classList.add('historialM');
+
+    const h5Sueldo = document.createElement('H5');
+    h5Sueldo.textContent = asunto;
+    
+
+    const h5Monto = document.createElement('H5');
+    h5Monto.textContent = monto;
+
+
+    const h5Fecha = document.createElement('H5');
+    h5Fecha.textContent = `${fecha.getDate()}-${fecha.getMonth()+1}-${fecha.getFullYear()}`;
+
+    div.appendChild(h5Sueldo);
+    div.appendChild(h5Monto);
+    div.appendChild(h5Fecha);
+
+    insertarDatos.appendChild(div);
+    
+}
+
+const insertarDatosDeuda = document.getElementById('contenedorDeuda');
+
+const crearBloqueDeuda = (nombre,monto) =>{
+
+    let fecha = new Date();
+    const div = document.createElement('DIV');
+    div.classList.add('datosDeuda');
+
+    const divBotones = document.createElement('DIV');
+
+    
+    const nombreDeuda = document.createElement('H5');
+    nombreDeuda.textContent = nombre;
+    
+    const montoDeuda = document.createElement('H5');
+    montoDeuda.textContent = monto;
+    
+    const fechaDeuda = document.createElement('H5');
+    fechaDeuda.textContent = `${fecha.getDate()}-${fecha.getMonth()+1}-${fecha.getFullYear()}`;
+    
+    const boton1 = document.createElement('BUTTON');
+
+    boton1.classList.add('confirm');
+    
+    const iconoLike = document.createElement('I');
+    iconoLike.classList.add('fa');
+    iconoLike.classList.add('fa-check');
+    
+    boton1.appendChild(iconoLike);
+    
+    divBotones.appendChild(boton1);
+    div.appendChild(nombreDeuda);
+    div.appendChild(montoDeuda);
+    div.appendChild(fechaDeuda);
+    div.appendChild(divBotones);
+
+    insertarDatosDeuda.appendChild(div);
+
+        boton1.addEventListener('click',()=>{
+
+            // BORRAR EL REGISTRO DE DEUDA DE LA BASE DE DATOS
+
+
+            div.remove();
+
+        })
+
+}
+
+
+
 
 
 
@@ -67,9 +149,7 @@ btns.forEach(function(btn){
     })
 })
 
-
-
-exit.addEventListener('click', ()=>{
+const salir = () => {
     modalS.classList.remove('modal');
     ventanaS.style.display = 'none';
     ventanaM.style.height = '0';
@@ -93,9 +173,10 @@ exit.addEventListener('click', ()=>{
                 break;
         }
     })
+}
 
-
-    
+exit.addEventListener('click', ()=>{
+    salir();
 
 })
 
@@ -118,6 +199,21 @@ window.addEventListener('load', ()=>{
     vistaDatosAhorro.textContent = localStorage.getItem('ahorro');
     vistaDatosDeuda.textContent = localStorage.getItem('deuda');
     
+    try {
+        let comentariosHistorial = JSON.parse(localStorage.getItem('comentariosSaldo'));
+        let saldoHistorial = JSON.parse(localStorage.getItem('saldoGuardado'));
+
+        let asuntoDeuda = JSON.parse(localStorage.getItem('asuntoDeuda'));
+        let saldoDeuda = JSON.parse(localStorage.getItem('saldoDGuardados'))
+
+        for(let i = 0;i < comentariosHistorial.length;i++){
+            crearBloque(comentariosHistorial[i],saldoHistorial[i]);
+            crearBloqueDeuda(asuntoDeuda[i],saldoDeuda[i]);
+        }
+    } catch (error) {
+        console.error('No existe historial en la base de datos')
+    }
+    
 })
 
 // Borrar datos
@@ -130,20 +226,41 @@ document.getElementById('limpiar').addEventListener('click', ()=>{
     },3000)
 })
 
-const guardarDatos = (opcion) =>{
+
+let asuntosSaldo = [];
+let saldoGuardar = [];
+let asuntosPendiente = [];
+let asuntosAhorro = [];
+let asuntosDeuda = [];
+let saldoDeuda = [];
+
+const guardarDatos = (opcion,clickeado) =>{
 
     let saldo = cantidadDinero.value;
-    let asuntos = asunto.value;
 
     switch(opcion){
         case 0:
 
             let saldoActual = parseFloat(localStorage.getItem('saldo')) + parseFloat(saldo);
 
+            saldoGuardar.push(saldo);
+
+            let saldoGuardado = JSON.stringify(saldoGuardar);
+            
+
+            asuntosSaldo.push(asunto.value);
+            let asuntosGuardados = JSON.stringify(asuntosSaldo);
+
             localStorage.setItem('saldo',saldoActual);
-            localStorage.setItem('asuntoSaldo',asuntos);
+            localStorage.setItem('saldoGuardado',saldoGuardado);
+            localStorage.setItem('comentariosSaldo',asuntosGuardados);
 
             vistaDatosSaldo.textContent = localStorage.getItem('saldo');
+
+            for(let i=clickeado;i< asuntosSaldo.length;i++){
+               crearBloque(asuntosSaldo[i],saldo);
+               break;
+            }
 
             break;
         case 1:
@@ -153,6 +270,8 @@ const guardarDatos = (opcion) =>{
             localStorage.setItem('asuntoPendiente',asuntos);
 
             vistaDatosPendiente.textContent = localStorage.getItem('pendiente');
+            crearBloque(asuntos,saldo);
+
             break;
         case 2:
             let saldoActualA = parseFloat(localStorage.getItem('ahorro')) + parseFloat(saldo);
@@ -161,14 +280,30 @@ const guardarDatos = (opcion) =>{
             localStorage.setItem('asuntoAhorro',asuntos);
 
             vistaDatosAhorro.textContent = localStorage.getItem('ahorro');
+            crearBloque(asuntos,saldo);
+
             break;
         case 3:
             let saldoActualD = parseFloat(localStorage.getItem('deuda')) + parseFloat(saldo);
 
+            saldoDeuda.push(saldo);
+
+            let saldoDGuardado = JSON.stringify(saldoDeuda);
+            
+
+            asuntosDeuda.push(asunto.value);
+            let asuntoDsGuardados = JSON.stringify(asuntosDeuda);
+
             localStorage.setItem('deuda',saldoActualD);
-            localStorage.setItem('asuntoDeuda',asuntos);
+            localStorage.setItem('asuntoDeuda',asuntoDsGuardados);
+            localStorage.setItem('saldoDGuardados',saldoDGuardado);
 
             vistaDatosDeuda.textContent = localStorage.getItem('deuda');
+            for(let i=clickeadoD;i< asuntosSaldo.length;i++){
+                crearBloqueDeuda(asuntosDeuda[i],saldoDeuda);
+                break;
+             }
+
             break;
     }
 
@@ -177,28 +312,29 @@ const guardarDatos = (opcion) =>{
     cantidadDinero.value = '';
     asunto.value = '';
 }
-
+let clickeado = 0;
 btnSaldo.addEventListener('click',()=>{
-    guardarDatos(0);
+    guardarDatos(0,clickeado);
+    clickeado++;
+    salir();
 })
 
 /**         FIN SALDO        */
 
 btnPendiente.addEventListener('click',()=>{
     guardarDatos(1);
-
+    salir();
 })
 
 btnAhorro.addEventListener('click',()=>{
     guardarDatos(2);
-
-
+    salir();
 })
-
+let clickeadoD = 0;
 btnDeuda.addEventListener('click',()=>{
-    guardarDatos(3);
-
-
+    guardarDatos(3,clickeadoD);
+    clickeadoD++;
+    salir();
 })
 
 

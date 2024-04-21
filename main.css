@@ -188,7 +188,7 @@
     width: 90vw;
     height: 150px;
     background-color: var(--verde);
-    margin: auto;
+    margin: 50px auto;
     position: relative;
     top: 190px;
     border-radius: 15px;
@@ -202,9 +202,22 @@
   }
   .cajaDeuda{
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(4,1fr);
     justify-content: center;
     border-bottom: 1px solid #000;
+  }
+
+  .datosDeuda{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    justify-content: center;
+    border-bottom: 1px solid #000;
+    align-items: center;
+  }
+
+  .datosDeuda > div > button{
+    width: 20px;
+    margin: 3px 3px;
   }
   .deudaM{
     color: #fff;
