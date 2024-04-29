@@ -1,4 +1,4 @@
-
+//Al agregar despues de recargar pagina verificar
 
 if(!localStorage.getItem('primeraVisita')){
     alert('Bienvenido a primera vez a nuestra pagina');
@@ -8,6 +8,15 @@ if(!localStorage.getItem('primeraVisita')){
     localStorage.setItem('pendiente','0');
     localStorage.setItem('ahorro','0');
     localStorage.setItem('deuda','0');
+    localStorage.setItem('comentariosSaldo','')
+    localStorage.setItem('saldoGuardado','')
+    localStorage.setItem('asuntoDeuda','')
+    localStorage.setItem('saldoDGuardado','')
+    localStorage.setItem('controlS','0');
+    localStorage.setItem('controlD','0');
+    localStorage.setItem('idDeuda','');
+
+
 }
 
 const insertarDatos = document.getElementById('contenedorHistorial');
@@ -39,8 +48,10 @@ const crearBloque = (asunto,monto)=>{
 }
 
 const insertarDatosDeuda = document.getElementById('contenedorDeuda');
+let contadorDeuda = 0;
 
 const crearBloqueDeuda = (nombre,monto) =>{
+
 
     let fecha = new Date();
     const div = document.createElement('DIV');
@@ -54,18 +65,22 @@ const crearBloqueDeuda = (nombre,monto) =>{
     
     const montoDeuda = document.createElement('H5');
     montoDeuda.textContent = monto;
+
     
     const fechaDeuda = document.createElement('H5');
     fechaDeuda.textContent = `${fecha.getDate()}-${fecha.getMonth()+1}-${fecha.getFullYear()}`;
     
     const boton1 = document.createElement('BUTTON');
-
+    
     boton1.classList.add('confirm');
     
     const iconoLike = document.createElement('I');
     iconoLike.classList.add('fa');
     iconoLike.classList.add('fa-check');
     
+    boton1.setAttribute('id',contadorDeuda);
+    div.setAttribute('id',contadorDeuda)
+
     boton1.appendChild(iconoLike);
     
     divBotones.appendChild(boton1);
@@ -73,12 +88,24 @@ const crearBloqueDeuda = (nombre,monto) =>{
     div.appendChild(montoDeuda);
     div.appendChild(fechaDeuda);
     div.appendChild(divBotones);
+    contadorDeuda++;
 
     insertarDatosDeuda.appendChild(div);
 
         boton1.addEventListener('click',()=>{
 
             // BORRAR EL REGISTRO DE DEUDA DE LA BASE DE DATOS
+            
+            let presionado = boton1.getAttribute('id');
+
+            let asuntoDeudaTemp  = JSON.parse(localStorage.getItem('asuntoDeuda'))
+            let montoDeudaTemp = JSON.parse(localStorage.getItem('saldoDGuardados'))
+            
+            asuntoDeudaTemp.splice(presionado,1);
+            montoDeudaTemp.splice(presionado,1);
+
+            localStorage.setItem('asuntoDeuda',JSON.stringify(asuntoDeudaTemp));
+            localStorage.setItem('saldoDGuardados',JSON.stringify(montoDeudaTemp));
 
 
             div.remove();
@@ -193,26 +220,94 @@ const vistaDatosPendiente = document.getElementById('vistaPendiente');
 const vistaDatosAhorro = document.getElementById('vistaAhorro');
 const vistaDatosDeuda = document.getElementById('vistaDeuda');
 
+let clickeado= 0;
+let clickeadoD= 0;
+
+let asuntosSaldo = [];
+let saldoGuardar = [];
+let asuntosPendiente = [];
+let asuntosAhorro = [];
+let asuntosDeuda = [];
+let saldoDeuda = [];
+
+
+const mostrarDeuda = ()=>{
+    let saldoTotalDeuda;
+    let deudaTotal = 0
+    saldoTotalDeuda = JSON.parse( localStorage.getItem('saldoDGuardados'));
+
+    saldoTotalDeuda.forEach(total =>{
+        deudaTotal += parseFloat(total);
+    })
+    return deudaTotal;
+}
+
 window.addEventListener('load', ()=>{
     vistaDatosSaldo.textContent = localStorage.getItem('saldo');
     vistaDatosPendiente.textContent = localStorage.getItem('pendiente');
     vistaDatosAhorro.textContent = localStorage.getItem('ahorro');
-    vistaDatosDeuda.textContent = localStorage.getItem('deuda');
+
+   
+
+    vistaDatosDeuda.textContent = mostrarDeuda();
+
+
+
+    clickeado =parseInt(localStorage.getItem('controlS'));
+    clickeadoD =parseInt(localStorage.getItem('controlD'));
+
+
+    clickeado = parseInt(localStorage.getItem('controlS'))
+    clickeadoD = localStorage.getItem('controlD')
+
+    clickeadoD = parseInt(localStorage.getItem('controlD'));
+
+    console.log(clickeado)
+    console.log(clickeadoD)
+
     
     try {
-        let comentariosHistorial = JSON.parse(localStorage.getItem('comentariosSaldo'));
-        let saldoHistorial = JSON.parse(localStorage.getItem('saldoGuardado'));
+        let comentariosHistorialC = JSON.parse(localStorage.getItem('comentariosSaldo'));
+        let saldoHistorialC = JSON.parse(localStorage.getItem('saldoGuardado'));
 
-        let asuntoDeuda = JSON.parse(localStorage.getItem('asuntoDeuda'));
-        let saldoDeuda = JSON.parse(localStorage.getItem('saldoDGuardados'))
-
-        for(let i = 0;i < comentariosHistorial.length;i++){
-            crearBloque(comentariosHistorial[i],saldoHistorial[i]);
-            crearBloqueDeuda(asuntoDeuda[i],saldoDeuda[i]);
+        console.log(comentariosHistorialC)
+        console.log(saldoHistorialC)
+        
+        for(let i=0;i<comentariosHistorialC.length;i++){
+            crearBloque(comentariosHistorialC[i],saldoHistorialC[i]);
         }
+
+
+        
+        
     } catch (error) {
         console.error('No existe historial en la base de datos')
     }
+    
+
+    try{
+        let saldoDeudaC = JSON.parse(localStorage.getItem('saldoDGuardados'))
+        let asuntoDeudaC = JSON.parse(localStorage.getItem('asuntoDeuda'))
+        for(let i = 0;i < saldoDeudaC.length;i++){
+            crearBloqueDeuda(asuntoDeudaC[i],saldoDeudaC[i]);
+        }
+
+        saldoDeudaC.forEach(saldo =>{
+            saldoDeuda.push(saldo)
+        })
+
+        asuntoDeudaC.forEach(asuntoD =>{
+            asuntosDeuda.push(asuntoD);
+        })
+        console.log(saldoDeuda)
+        
+
+    }catch(error){
+        console.error('No hay datos ')
+    }
+    
+    
+   
     
 })
 
@@ -227,12 +322,9 @@ document.getElementById('limpiar').addEventListener('click', ()=>{
 })
 
 
-let asuntosSaldo = [];
-let saldoGuardar = [];
-let asuntosPendiente = [];
-let asuntosAhorro = [];
-let asuntosDeuda = [];
-let saldoDeuda = [];
+
+
+let idDeuda = [];
 
 const guardarDatos = (opcion,clickeado) =>{
 
@@ -258,7 +350,8 @@ const guardarDatos = (opcion,clickeado) =>{
             vistaDatosSaldo.textContent = localStorage.getItem('saldo');
 
             for(let i=clickeado;i< asuntosSaldo.length;i++){
-               crearBloque(asuntosSaldo[i],saldo);
+               crearBloque(asuntosSaldo[i],saldoGuardar[i]);
+               console.log('entro')
                break;
             }
 
@@ -289,20 +382,25 @@ const guardarDatos = (opcion,clickeado) =>{
             saldoDeuda.push(saldo);
 
             let saldoDGuardado = JSON.stringify(saldoDeuda);
+
+            asuntosDeuda.push(asunto.value)
+
             
-
-            asuntosDeuda.push(asunto.value);
             let asuntoDsGuardados = JSON.stringify(asuntosDeuda);
-
+            
             localStorage.setItem('deuda',saldoActualD);
             localStorage.setItem('asuntoDeuda',asuntoDsGuardados);
             localStorage.setItem('saldoDGuardados',saldoDGuardado);
 
             vistaDatosDeuda.textContent = localStorage.getItem('deuda');
-            for(let i=clickeadoD;i< asuntosSaldo.length;i++){
-                crearBloqueDeuda(asuntosDeuda[i],saldoDeuda);
-                break;
-             }
+
+            for(let i = clickeadoD;i<asuntosDeuda.length;i++){
+                crearBloqueDeuda(asuntosDeuda[i],saldoDeuda[i]);
+                idDeuda.push(i);
+                break; 
+            }
+
+            localStorage.setItem('idDeuda',JSON.stringify(idDeuda))
 
             break;
     }
@@ -312,10 +410,11 @@ const guardarDatos = (opcion,clickeado) =>{
     cantidadDinero.value = '';
     asunto.value = '';
 }
-let clickeado = 0;
 btnSaldo.addEventListener('click',()=>{
     guardarDatos(0,clickeado);
     clickeado++;
+    let guardarclick = clickeado.toString();
+    localStorage.setItem('controlS',guardarclick);
     salir();
 })
 
@@ -330,10 +429,11 @@ btnAhorro.addEventListener('click',()=>{
     guardarDatos(2);
     salir();
 })
-let clickeadoD = 0;
 btnDeuda.addEventListener('click',()=>{
     guardarDatos(3,clickeadoD);
     clickeadoD++;
+    let guardarclickD = clickeadoD.toString();
+    localStorage.setItem('controlD',guardarclickD); 
     salir();
 })
 
