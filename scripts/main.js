@@ -1,5 +1,10 @@
 //Al agregar despues de recargar pagina verificar
 
+const vistaDatosSaldo = document.getElementById('vistaSaldo');
+const vistaDatosPendiente = document.getElementById('vistaPendiente');
+const vistaDatosAhorro = document.getElementById('vistaAhorro');
+const vistaDatosDeuda = document.getElementById('vistaDeuda');
+
 if(!localStorage.getItem('primeraVisita')){
     alert('Bienvenido a primera vez a nuestra pagina');
 
@@ -7,7 +12,6 @@ if(!localStorage.getItem('primeraVisita')){
     localStorage.setItem('saldo','0');
     localStorage.setItem('pendiente','0');
     localStorage.setItem('ahorro','0');
-    localStorage.setItem('deuda','0');
     localStorage.setItem('comentariosSaldo','')
     localStorage.setItem('saldoGuardado','')
     localStorage.setItem('asuntoDeuda','')
@@ -95,8 +99,12 @@ const crearBloqueDeuda = (nombre,monto) =>{
         boton1.addEventListener('click',()=>{
 
             // BORRAR EL REGISTRO DE DEUDA DE LA BASE DE DATOS
+
+
+
             
             let presionado = boton1.getAttribute('id');
+            
 
             let asuntoDeudaTemp  = JSON.parse(localStorage.getItem('asuntoDeuda'))
             let montoDeudaTemp = JSON.parse(localStorage.getItem('saldoDGuardados'))
@@ -104,8 +112,21 @@ const crearBloqueDeuda = (nombre,monto) =>{
             asuntoDeudaTemp.splice(presionado,1);
             montoDeudaTemp.splice(presionado,1);
 
+            console.log(presionado)
+            console.log(`Se removio el elemento con id: ${presionado}`);
+            console.log(asuntoDeudaTemp)
+            console.log(montoDeudaTemp)
+
+
+
             localStorage.setItem('asuntoDeuda',JSON.stringify(asuntoDeudaTemp));
             localStorage.setItem('saldoDGuardados',JSON.stringify(montoDeudaTemp));
+
+            contadorDeuda--;
+
+            //ACTUALIZAR MENU DEUDA
+
+            vistaDatosDeuda.textContent = mostrarDeuda();
 
 
             div.remove();
@@ -215,11 +236,6 @@ exit.addEventListener('click', ()=>{
 const cantidadDinero = document.getElementById('agregar');
 const asunto = document.getElementById('asunto');
 
-const vistaDatosSaldo = document.getElementById('vistaSaldo');
-const vistaDatosPendiente = document.getElementById('vistaPendiente');
-const vistaDatosAhorro = document.getElementById('vistaAhorro');
-const vistaDatosDeuda = document.getElementById('vistaDeuda');
-
 let clickeado= 0;
 let clickeadoD= 0;
 
@@ -236,10 +252,15 @@ const mostrarDeuda = ()=>{
     let deudaTotal = 0
     saldoTotalDeuda = JSON.parse( localStorage.getItem('saldoDGuardados'));
 
-    saldoTotalDeuda.forEach(total =>{
-        deudaTotal += parseFloat(total);
-    })
-    return deudaTotal;
+    try{
+        saldoTotalDeuda.forEach(total =>{
+            deudaTotal += parseFloat(total);
+        })
+        return deudaTotal;
+    }catch(e){
+        console.error('array vacio')
+        return 0;
+    }
 }
 
 window.addEventListener('load', ()=>{
@@ -247,23 +268,22 @@ window.addEventListener('load', ()=>{
     vistaDatosPendiente.textContent = localStorage.getItem('pendiente');
     vistaDatosAhorro.textContent = localStorage.getItem('ahorro');
 
-   
-
     vistaDatosDeuda.textContent = mostrarDeuda();
 
+    try{
+        clickeado = JSON.parse(localStorage.getItem('comentariosSaldo')).length
 
+    }catch(e){
+        console.error('error de analisis saldo')
+    }
 
-    clickeado =parseInt(localStorage.getItem('controlS'));
-    clickeadoD =parseInt(localStorage.getItem('controlD'));
+    try{
+        clickeadoD = JSON.parse(localStorage.getItem('asuntoDeuda')).length
 
-
-    clickeado = parseInt(localStorage.getItem('controlS'))
-    clickeadoD = localStorage.getItem('controlD')
-
-    clickeadoD = parseInt(localStorage.getItem('controlD'));
-
-    console.log(clickeado)
-    console.log(clickeadoD)
+        console.log(clickeado)
+    } catch(e){
+        console.error('error de analisis deuda')
+    }
 
     
     try {
@@ -272,10 +292,18 @@ window.addEventListener('load', ()=>{
 
         console.log(comentariosHistorialC)
         console.log(saldoHistorialC)
-        
+
         for(let i=0;i<comentariosHistorialC.length;i++){
             crearBloque(comentariosHistorialC[i],saldoHistorialC[i]);
         }
+
+        comentariosHistorialC.forEach(comen =>{
+            asuntosSaldo.push(comen);
+        })
+
+        saldoHistorialC.forEach(saldo =>{
+            saldoGuardar.push(saldo)
+        })
 
 
         
@@ -286,6 +314,7 @@ window.addEventListener('load', ()=>{
     
 
     try{
+
         let saldoDeudaC = JSON.parse(localStorage.getItem('saldoDGuardados'))
         let asuntoDeudaC = JSON.parse(localStorage.getItem('asuntoDeuda'))
         for(let i = 0;i < saldoDeudaC.length;i++){
@@ -299,7 +328,6 @@ window.addEventListener('load', ()=>{
         asuntoDeudaC.forEach(asuntoD =>{
             asuntosDeuda.push(asuntoD);
         })
-        console.log(saldoDeuda)
         
 
     }catch(error){
@@ -326,7 +354,7 @@ document.getElementById('limpiar').addEventListener('click', ()=>{
 
 let idDeuda = [];
 
-const guardarDatos = (opcion,clickeado) =>{
+const guardarDatos = (opcion) =>{
 
     let saldo = cantidadDinero.value;
 
@@ -341,6 +369,7 @@ const guardarDatos = (opcion,clickeado) =>{
             
 
             asuntosSaldo.push(asunto.value);
+
             let asuntosGuardados = JSON.stringify(asuntosSaldo);
 
             localStorage.setItem('saldo',saldoActual);
@@ -370,10 +399,14 @@ const guardarDatos = (opcion,clickeado) =>{
             let saldoActualA = parseFloat(localStorage.getItem('ahorro')) + parseFloat(saldo);
 
             localStorage.setItem('ahorro',saldoActualA);
-            localStorage.setItem('asuntoAhorro',asuntos);
 
             vistaDatosAhorro.textContent = localStorage.getItem('ahorro');
-            crearBloque(asuntos,saldo);
+
+            let saldoAhorro = parseFloat(localStorage.getItem('saldo')) - parseFloat(saldo);
+
+            localStorage.setItem('saldo',saldoAhorro);  
+
+            vistaDatosSaldo.textContent = saldoAhorro;
 
             break;
         case 3:
@@ -392,7 +425,7 @@ const guardarDatos = (opcion,clickeado) =>{
             localStorage.setItem('asuntoDeuda',asuntoDsGuardados);
             localStorage.setItem('saldoDGuardados',saldoDGuardado);
 
-            vistaDatosDeuda.textContent = localStorage.getItem('deuda');
+            vistaDatosDeuda.textContent = mostrarDeuda();
 
             for(let i = clickeadoD;i<asuntosDeuda.length;i++){
                 crearBloqueDeuda(asuntosDeuda[i],saldoDeuda[i]);
@@ -411,7 +444,7 @@ const guardarDatos = (opcion,clickeado) =>{
     asunto.value = '';
 }
 btnSaldo.addEventListener('click',()=>{
-    guardarDatos(0,clickeado);
+    guardarDatos(0);
     clickeado++;
     let guardarclick = clickeado.toString();
     localStorage.setItem('controlS',guardarclick);
@@ -430,7 +463,7 @@ btnAhorro.addEventListener('click',()=>{
     salir();
 })
 btnDeuda.addEventListener('click',()=>{
-    guardarDatos(3,clickeadoD);
+    guardarDatos(3  );
     clickeadoD++;
     let guardarclickD = clickeadoD.toString();
     localStorage.setItem('controlD',guardarclickD); 
