@@ -1,122 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
     <title>GD</title>
-</head>
-<body>
-
-
-  <div class="fondoVentana" id="fondoVentana">
-  </div>
-  <div class="ventanaLateral" id="ventanaL">
-
-    <div class="apartados">
-      <h3>Apartados <i id="down" class="fa fa-angle-right"></i></h3>
-      <div class="apartadosDown" id="addE">
-        <a href="#" class="add" >+</a>
-        <a href="#">Personal</a>
-
+  </head>
+  <body>
+    <div class="fondoVentana" id="fondoVentana"></div>
+    <div class="ventanaLateral" id="ventanaL">
+      <div class="apartados">
+        <h3>Apartados <i id="down" class="fa fa-angle-right"></i></h3>
+        <div class="apartadosDown" id="addE">
+          <a href="#" class="add">+</a>
+          <a href="#">Personal</a>
+        </div>
+        <a href="#" class="contacto">Contacto</a>
+        <a href="#" id="limpiar" class="contacto">limpiar</a>
       </div>
-      <a href="#" class="contacto">Contacto</a>
-      <a href="#" id="limpiar" class="contacto">limpiar</a>
     </div>
 
-  </div>
-
-
     <div class="fondo">
-        <button class='boton1' id="btnL"><i class="fa fa-bars bars"></i></button>
-        <div class="cuadro_datos">
+      <button class="boton1" id="btnL"><i class="fa fa-bars bars"></i></button>
+      <div class="cuadro_datos">
+        <!------------------------SALDO---------------------------->
 
-          <!------------------------SALDO---------------------------->
-
-          <div class='cuadro Saldo'>
-            <h3>Saldo</h3>
-            <h4 id="vistaSaldo">0</h4>     
-            <button id="btnVer" value="saldo">Ver mas</button>
-
-          </div>
-
-          <!------------------------PENDIENTE---------------------------->
-
-          <div class='cuadro Pendiente'>
-            <h3>Pendiente</h3>
-            <h4 id="vistaPendiente">0</h4>
-            <button id="btnVer" value="pendiente">Ver mas</button>
-
-
-          </div>
-
-          <!-------------------------AHORRO--------------------------->
-
-          <div class='cuadro Ahorro'>
-            <h3>Ahorro</h3>
-            <h4 id="vistaAhorro">0</h4>
-            <button id="btnVer" value="ahorro">Ver mas</button>
-
-
-          </div>
-
-          <!------------------------DEUDA---------------------------->
-
-          <div class='cuadro Deuda'>
-            <h3>Deuda</h3>
-            <h4 id="vistaDeuda">0</h4>
-            <button id="btnVer" value="deuda">Ver mas</button>
-          </div>
-
-         <!---------------------------------------------------->
-
+        <div class="cuadro Saldo">
+          <h3>Saldo</h3>
+          <h4 id="vistaSaldo">0</h4>
+          <button id="btnVer" value="saldo">Ver mas</button>
         </div>
-        <button id="user" class='boton2'><i class="fa fa-user user"></i></button>
-        
+
+        <!------------------------PENDIENTE---------------------------->
+
+        <div class="cuadro Pendiente">
+          <h3>Pendiente</h3>
+          <h4 id="vistaPendiente">0</h4>
+          <button id="btnVer" value="pendiente">Ver mas</button>
+        </div>
+
+        <!-------------------------AHORRO--------------------------->
+
+        <div class="cuadro Ahorro">
+          <h3>Ahorro</h3>
+          <h4 id="vistaAhorro">0</h4>
+          <button id="btnVer" value="ahorro">Ver mas</button>
+        </div>
+
+        <!------------------------DEUDA---------------------------->
+
+        <div class="cuadro Deuda">
+          <h3>Deuda</h3>
+          <h4 id="vistaDeuda">0</h4>
+          <button id="btnVer" value="deuda">Ver mas</button>
+        </div>
+
+        <!---------------------------------------------------->
       </div>
-      
-      
-        
-      <div id="modal">
-        <div class="ventana">
-            <button id="exit">X</button>
-            <div class="saldo" id="saldo">
-              <h2 id="titleModal"></h2>
-              <input type="number" id="agregar">
-              <input type="text" placeholder="Asunto" id="asunto">
-            </div>
+      <button id="user" class="boton2"><i class="fa fa-user user"></i></button>
+    </div>
+
+    <div id="modal">
+      <div class="ventana">
+        <button id="exit">X</button>
+        <div class="saldo" id="saldo">
+          <h2 id="titleModal"></h2>
+          <input type="number" id="agregar" />
+          <input type="text" placeholder="Asunto" id="asunto" />
         </div>
       </div>
+    </div>
 
-          <!------------------------Historial---------------------------->
+    <!------------------------Historial---------------------------->
 
-
-          <div class="deuda" id="contenedorDeuda">
-            <h3>Deuda</h3>
-            <div class="cajaDeuda">
-              <h5>Nombre</h5>
-              <h5>Monto</h5>
-              <h5>Fecha</h5>
-              <h5>Pago realizado</h5>
-            </div>
-            
-          </div>
-
-      <div class="historial" id="contenedorHistorial">
-        <h3>Historial</h3>
-        <div class="cajaHistorial">
-          <h5>Asunto</h5>
-          <h5>Monto</h5>
-          <h5>Fecha</h5>
-        </div>
-        
+    <div class="deuda" id="contenedorDeuda">
+      <h3>Deuda</h3>
+      <div class="cajaDeuda">
+        <h5>Nombre</h5>
+        <h5>Monto</h5>
+        <h5>Fecha</h5>
+        <h5>Pago realizado</h5>
       </div>
+    </div>
 
-      
-</body>
+    <div class="historial" id="contenedorHistorial">
+      <h3>Historial</h3>
+      <div class="cajaHistorial">
+        <h5>Asunto</h5>
+        <h5>Monto</h5>
+        <h5>Fecha</h5>
+      </div>
+    </div>
+  </body>
 
-<script src="scripts/main.js"></script>
-<script src="scripts/deuda.js"></script>
-<script src="scripts/apartados.js"></script>
-<script src="https://kit.fontawesome.com/830f4ca4e4.js" crossorigin="anonymous"></script>
+  <script src="scripts/main.js"></script>
+  <script src="scripts/deuda.js"></script>
+  <script src="scripts/apartados.js"></script>
+  <script
+    src="https://kit.fontawesome.com/830f4ca4e4.js"
+    crossorigin="anonymous"
+  ></script>
 </html>

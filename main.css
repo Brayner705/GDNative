@@ -9,6 +9,32 @@
     box-sizing: border-box;
 }
 
+.void{
+  border: none;
+  border-bottom: 1px solid var(--verde);
+  outline: none;
+  padding: 3px;
+}
+
+
+
+.voidError{
+  animation: error 2s ease  normal;
+}
+
+@keyframes error{
+  0%{
+    border-bottom: 1px solid var(--verde);
+  }
+  50%{
+    border-bottom: 1px solid #d00;
+  }
+  100%{
+    border-bottom: 1px solid var(--verde);
+  }
+}
+
+
   .fondo{
     background-color: var(--verde);
     width: 100vw;
