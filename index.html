@@ -21,7 +21,7 @@
     </div>
 
     <div class="fondo">
-      <button class="boton1" id="btnL"><i class="fa fa-bars bars"></i></button>
+      <button class="boton1" id="btnL" aria-label="barraLateral"><i class="fa fa-bars bars"></i></button>
       <div class="cuadro_datos">
         <!------------------------SALDO---------------------------->
 
@@ -57,7 +57,7 @@
 
         <!---------------------------------------------------->
       </div>
-      <button id="user" class="boton2"><i class="fa fa-user user"></i></button>
+      <button id="user" class="boton2" aria-label="usuario"><i class="fa fa-user user"></i></button>
     </div>
 
     <div id="modal">
@@ -75,6 +75,16 @@
 
     <div class="deuda" id="contenedorDeuda">
       <h3>Deuda</h3>
+      <div class="cajaDeuda">
+        <h5>Nombre</h5>
+        <h5>Monto</h5>
+        <h5>Fecha</h5>
+        <h5>Pago realizado</h5>
+      </div>
+    </div>
+
+    <div class="deuda" id="contenedorPendiente">
+      <h3>Pendiente</h3>
       <div class="cajaDeuda">
         <h5>Nombre</h5>
         <h5>Monto</h5>
