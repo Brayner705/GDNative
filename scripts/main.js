@@ -14,6 +14,8 @@ let asuntosSaldoGasto = [];
 
 let clickeado = 0;
 let clickeadoD = 0;
+let contadorPendiente = 0;
+let contadorDeuda = 0;
 
 //  ELEMENTOS OBTENIDOS
 
@@ -21,6 +23,10 @@ const vistaDatosSaldo = document.getElementById("vistaSaldo");
 const vistaDatosPendiente = document.getElementById("vistaPendiente");
 const vistaDatosAhorro = document.getElementById("vistaAhorro");
 const vistaDatosDeuda = document.getElementById("vistaDeuda");
+const insertarDatos = document.getElementById("contenedorHistorial");
+const insertarDatosGastos = document.getElementById("contenedorGastos");
+const insertarDatosPendiente = document.getElementById("contenedorPendiente");
+const insertarDatosDeuda = document.getElementById("contenedorDeuda");
 
 const btns = document.querySelectorAll("#btnVer");
 const modalS = document.getElementById("modal");
@@ -61,11 +67,38 @@ if (!localStorage.getItem("primeraVisita")) {
   localStorage.setItem("controlS", "0");
   localStorage.setItem("controlD", "0");
   localStorage.setItem("idDeuda", "");
-  localStorage.setItem('asuntoPendiente',"");
-  localStorage.setItem('saldoPendiente','');
+  localStorage.setItem("asuntoPendiente", "");
+  localStorage.setItem("saldoPendiente", "");
+  localStorage.setItem("gasto", "");
+  localStorage.setItem("gastoAsunto", "");
 }
 
-const insertarDatos = document.getElementById("contenedorHistorial");
+// ------------------------- CREANDO BLOQUES ------------------------------------
+
+const crearBloqueGastos = (asunto, monto) => {
+  let fecha = new Date();
+  const div = document.createElement("DIV");
+  div.setAttribute("id", "bloqueGasto");
+  div.classList.add("cajaHistorial");
+  div.classList.add("historialM");
+
+  const h5Asunto = document.createElement("H5");
+  h5Asunto.textContent = asunto;
+
+  const h5Monto = document.createElement("H5");
+  h5Monto.textContent = monto;
+
+  const h5Fecha = document.createElement("H5");
+  h5Fecha.textContent = `${fecha.getDate()}-${
+    fecha.getMonth() + 1
+  }-${fecha.getFullYear()}`;
+
+  div.appendChild(h5Asunto);
+  div.appendChild(h5Monto);
+  div.appendChild(h5Fecha);
+
+  insertarDatosGastos.appendChild(div);
+};
 
 const crearBloque = (asunto, monto) => {
   let fecha = new Date();
@@ -91,10 +124,6 @@ const crearBloque = (asunto, monto) => {
   insertarDatos.appendChild(div);
 };
 
-
-const insertarDatosPendiente = document.getElementById("contenedorPendiente");
-let contadorPendiente = 0;
-
 const crearBloquePendiente = (nombre, monto) => {
   let fecha = new Date();
   const div = document.createElement("DIV");
@@ -106,6 +135,8 @@ const crearBloquePendiente = (nombre, monto) => {
   nombrePendiente.textContent = nombre;
 
   const montoPendiente = document.createElement("H5");
+  montoPendiente.setAttribute("id", monto);
+  montoPendiente.setAttribute("value", monto);
   montoPendiente.textContent = monto;
 
   const fechaPendiente = document.createElement("H5");
@@ -121,7 +152,7 @@ const crearBloquePendiente = (nombre, monto) => {
   iconoLike.classList.add("fa");
   iconoLike.classList.add("fa-check");
 
-  botonP.setAttribute("id", contadorPendiente);
+  botonP.setAttribute("id", nombre);
   div.setAttribute("id", contadorPendiente);
 
   botonP.appendChild(iconoLike);
@@ -132,45 +163,66 @@ const crearBloquePendiente = (nombre, monto) => {
   div.appendChild(fechaPendiente);
   div.appendChild(divBotones);
   contadorPendiente++;
-
   insertarDatosPendiente.appendChild(div);
+
+  let saldoPrestado =
+    parseFloat(localStorage.getItem("saldo")) - parseFloat(monto);
+  vistaDatosSaldo.textContent = saldoPrestado;
+
+  localStorage.setItem("saldo", saldoPrestado);
 
   botonP.addEventListener("click", () => {
     // BORRAR EL REGISTRO DE DEUDA DE LA BASE DE DATOS
 
     let presionado = botonP.getAttribute("id");
+    let presionadoM = montoPendiente.getAttribute("id");
+    let montoPresionado = montoPendiente.getAttribute("value");
 
-    console.log(localStorage.getItem('asuntoPendiente'))
-    console.log(localStorage.getItem('saldoPendiente'))
+    console.log(localStorage.getItem("asuntoPendiente"));
+    console.log(localStorage.getItem("saldoPendiente"));
 
-    let asuntoPendienteTemp = JSON.parse(localStorage.getItem("asuntoPendiente"));
+    let asuntoPendienteTemp = JSON.parse(
+      localStorage.getItem("asuntoPendiente")
+    );
     let montoPendienteTemp = JSON.parse(localStorage.getItem("saldoPendiente"));
 
-    asuntoPendienteTemp.splice(presionado, 1);
-    montoPendienteTemp.splice(presionado, 1);
+    console.log(typeof asuntoPendienteTemp);
+    console.log(montoPendienteTemp);
 
-    console.log(presionado);
-    console.log(`Se removio el elemento con id: ${presionado}`);
+    asuntoPendienteTemp = asuntoPendienteTemp.filter(
+      (eliminar) => eliminar != presionado
+    );
+    montoPendienteTemp = montoPendienteTemp.filter(
+      (eliminar) => eliminar != presionadoM
+    );
+
+    saldoPendiente = montoPendienteTemp;
+    asuntosPendiente = asuntoPendienteTemp;
+
+    console.log("-------------------------------");
     console.log(asuntoPendienteTemp);
     console.log(montoPendienteTemp);
 
-    localStorage.setItem("asuntoPendiente", JSON.stringify(asuntoPendienteTemp));
-    localStorage.setItem("saldoPendiente", JSON.stringify(montoPendienteTemp));
+    asuntoPendienteTemp = JSON.stringify(asuntoPendienteTemp);
+    montoPendienteTemp = JSON.stringify(montoPendienteTemp);
+
+    localStorage.setItem("asuntoPendiente", asuntoPendienteTemp);
+    localStorage.setItem("saldoPendiente", montoPendienteTemp);
 
     contadorPendiente--;
 
+    let saldoDevuelto =
+      parseFloat(localStorage.getItem("saldo")) + parseFloat(montoPresionado);
+    localStorage.setItem("saldo", saldoDevuelto);
+
     //ACTUALIZAR MENU DEUDA
 
+    vistaDatosSaldo.textContent = saldoDevuelto;
     vistaDatosPendiente.textContent = mostrarPendiente();
 
     div.remove();
   });
 };
-
-// BLOQUE DEUDA
-
-const insertarDatosDeuda = document.getElementById("contenedorDeuda");
-let contadorDeuda = 0;
 
 const crearBloqueDeuda = (nombre, monto) => {
   let fecha = new Date();
@@ -183,6 +235,7 @@ const crearBloqueDeuda = (nombre, monto) => {
   nombreDeuda.textContent = nombre;
 
   const montoDeuda = document.createElement("H5");
+  montoDeuda.setAttribute("value", monto);
   montoDeuda.textContent = monto;
 
   const fechaDeuda = document.createElement("H5");
@@ -212,16 +265,26 @@ const crearBloqueDeuda = (nombre, monto) => {
 
   insertarDatosDeuda.appendChild(div);
 
+  let saldoTotal =
+    parseFloat(localStorage.getItem("saldo")) + parseFloat(monto);
+
+  vistaDatosSaldo.textContent = saldoTotal;
+
+  localStorage.setItem("saldo", saldoTotal);
+
   boton1.addEventListener("click", () => {
     // BORRAR EL REGISTRO DE DEUDA DE LA BASE DE DATOS -----------------------------------------------------------------------------------------------------------------
 
     let presionado = boton1.getAttribute("id");
+    let montoEliminar = parseFloat(montoDeuda.getAttribute("value"));
 
     let asuntoDeudaTemp = JSON.parse(localStorage.getItem("asuntoDeuda"));
     let montoDeudaTemp = JSON.parse(localStorage.getItem("saldoDGuardados"));
 
-    console.log(asuntoDeudaTemp)
-    console.log(montoDeudaTemp)
+    let saldoTotatRestante =
+      parseFloat(localStorage.getItem("saldo")) - montoEliminar;
+
+    localStorage.setItem("saldo", saldoTotatRestante);
 
     asuntoDeudaTemp.splice(presionado, 1);
     montoDeudaTemp.splice(presionado, 1);
@@ -239,11 +302,13 @@ const crearBloqueDeuda = (nombre, monto) => {
     //ACTUALIZAR MENU DEUDA
 
     vistaDatosDeuda.textContent = mostrarDeuda();
+    vistaDatosSaldo.textContent = saldoTotatRestante;
 
     div.remove();
   });
 };
 
+// ------------------------------ FIN DE BLOQUES --------------------------------
 btns.forEach(function (btn) {
   btn.addEventListener("click", () => {
     modalS.classList.add("modal");
@@ -262,9 +327,9 @@ btns.forEach(function (btn) {
         ventanaS.appendChild(btnSaldo);
         ventanaS.appendChild(btnGasto);
         break;
-      case "pendiente":
+      case "Pendiente":
         btnPendiente.setAttribute("id", "agregarPendiente");
-        btnPendiente.textContent = "Agregar Pendiente";
+        btnPendiente.textContent = "Agregar Monto";
         ventanaS.appendChild(btnPendiente);
         break;
       case "ahorro":
@@ -272,7 +337,7 @@ btns.forEach(function (btn) {
         btnAhorro.textContent = "Agregar Ahorro";
         ventanaS.appendChild(btnAhorro);
         break;
-      case "deuda":
+      case "Deuda":
         btnDeuda.setAttribute("id", "agregraDeuda");
         btnDeuda.textContent = "Agregar Deuda";
         ventanaS.appendChild(btnDeuda);
@@ -281,8 +346,13 @@ btns.forEach(function (btn) {
         console.log("no existe la opcion");
     }
 
-    inputOne.setAttribute("placeholder", `Ingresa ${opcion}`);
-    titleModal.textContent = opcion;
+    if (opcion != "Pendiente") {
+      titleModal.textContent = opcion;
+      inputOne.setAttribute("placeholder", `Ingrese ${opcion}`);
+    } else {
+      titleModal.textContent = "Deben";
+      inputOne.setAttribute("placeholder", "Ingrese monto");
+    }
   });
 });
 
@@ -293,7 +363,6 @@ btnGasto.addEventListener("click", () => {
 
   if (saldoActual >= saldo) {
     saldoActual = saldoActual - saldo;
-    localStorage.setItem("saldo", saldoActual);
 
     saldoGuardarGasto.push(saldo);
 
@@ -304,23 +373,42 @@ btnGasto.addEventListener("click", () => {
     let asuntosGuardados = JSON.stringify(asuntosSaldoGasto);
 
     localStorage.setItem("saldo", saldoActual);
-    localStorage.setItem("saldoGuardadoGasto", saldoGuardado);
-    localStorage.setItem("comentariosSaldoGasto", asuntosGuardados);
+    localStorage.setItem("gasto", saldoGuardado);
+    localStorage.setItem("gastoAsunto", asuntosGuardados);
 
     vistaDatosSaldo.textContent = localStorage.getItem("saldo");
 
-    let ultimaposicion = asuntosSaldoGasto.length - 1;
     inputOne.value = "";
     btnAsunto.value = "";
 
+    let cantidadDatos = saldoGuardarGasto.length;
+    let i = 0;
+
     console.log(asuntosSaldoGasto);
-    crearBloque(
-      asuntosSaldoGasto[ultimaposicion],
-      saldoGuardarGasto[ultimaposicion]
-    );
+
+    // FALTA AGREGAR LOS ELEMENTOS A LAS TABLA
+
+    try {
+      const allElements = document.querySelectorAll("#bloqueGasto");
+
+      allElements.forEach((elements) => {
+        elements.remove();
+      });
+
+      while (cantidadDatos > 0) {
+        crearBloqueGastos(asuntosSaldoGasto[i], saldoGuardarGasto[i]);
+        i++;
+        cantidadDatos--;
+      }
+    } catch (e) {
+      console.error("No existen datos en gastos");
+    }
+
     salir();
   } else {
     // AGREGAR CUANDO NO SE PUEDE HACER UN GASTO
+
+    alert("Estas gastando mas de lo que dispones  ");
   }
 });
 
@@ -337,14 +425,14 @@ const salir = () => {
         btnSaldo.remove();
         btnGasto.remove();
         break;
-      case "pendiente":
+      case "Pendiente":
         btnPendiente.remove();
 
         break;
       case "ahorro":
         btnAhorro.remove();
         break;
-      case "deuda":
+      case "Deuda":
         btnDeuda.remove();
         break;
     }
@@ -382,9 +470,9 @@ const mostrarDeuda = () => {
 const mostrarPendiente = () => {
   let saldoTotalPendiente;
   let pendienteTotal = 0;
-  saldoTotalPendiente = JSON.parse(localStorage.getItem("saldoPendiente"));
 
   try {
+    saldoTotalPendiente = JSON.parse(localStorage.getItem("saldoPendiente"));
     saldoTotalPendiente.forEach((total) => {
       pendienteTotal += parseFloat(total);
     });
@@ -401,6 +489,7 @@ window.addEventListener("load", () => {
   vistaDatosAhorro.textContent = localStorage.getItem("ahorro");
 
   vistaDatosDeuda.textContent = mostrarDeuda();
+  vistaDatosPendiente.textContent = mostrarPendiente();
 
   try {
     clickeado = JSON.parse(localStorage.getItem("comentariosSaldo")).length;
@@ -439,6 +528,45 @@ window.addEventListener("load", () => {
   } catch (error) {
     console.error("No existe historial en la base de datos");
   }
+
+  try {
+    let saldoPendienteC = JSON.parse(localStorage.getItem("saldoPendiente"));
+    let asuntoPendienteC = JSON.parse(localStorage.getItem("asuntoPendiente"));
+
+    for (let i = 0; i < saldoPendienteC.length; i++) {
+      crearBloquePendiente(asuntoPendienteC[i], saldoPendienteC[i]);
+    }
+
+    saldoPendienteC.forEach((saldoP) => {
+      saldoPendiente.push(saldoP);
+    });
+
+    asuntoPendienteC.forEach((asuntoP) => {
+      asuntosPendiente.push(asuntoP);
+    });
+  } catch (e) {
+    console.error("No hay Pendiente");
+  }
+
+  //------------------------------------ MOSTRANDO TABLA GASTOS -------------------------
+
+  try {
+    let arrayGastos = JSON.parse(localStorage.getItem("gasto"));
+    let arrayAsuntoGasto = JSON.parse(localStorage.getItem("gastoAsunto"));
+
+    let cantidadElementos = arrayGastos.length;
+    let i = 0;
+
+    while (cantidadElementos > 0) {
+      crearBloqueGastos(arrayAsuntoGasto[i], arrayGastos[i]);
+      i++;
+      cantidadElementos--;
+    }
+  } catch (e) {
+    console.error("No existen datos de gastos");
+  }
+
+  // ------------------------------------------------ PROBAR ----------------------------------
 
   try {
     let saldoDeudaC = JSON.parse(localStorage.getItem("saldoDGuardados"));
@@ -501,28 +629,32 @@ const guardarDatos = (opcion) => {
 
       break;
     case 1:
-      let saldoActualP =
-        parseFloat(localStorage.getItem("pendiente")) + parseFloat(saldo);
+      if (parseFloat(localStorage.getItem("saldo")) > parseFloat(saldo)) {
+        let saldoActualP =
+          parseFloat(localStorage.getItem("pendiente")) + parseFloat(saldo);
 
-      saldoPendiente.push(saldo);
-      asuntosPendiente.push(asunto.value);
+        saldoPendiente.push(saldo);
+        asuntosPendiente.push(asunto.value);
 
-      let saldoPGuardado = JSON.stringify(saldoPendiente);
-      let asuntoPGuardados = JSON.stringify(asuntosPendiente);
+        let saldoPGuardado = JSON.stringify(saldoPendiente);
+        let asuntoPGuardados = JSON.stringify(asuntosPendiente);
 
-      localStorage.setItem("pendiente", saldoActualP);
-      localStorage.setItem("asuntoPendiente", asuntoPGuardados);
-      localStorage.setItem("saldoPendiente", saldoPGuardado);
+        localStorage.setItem("pendiente", saldoActualP);
+        localStorage.setItem("asuntoPendiente", asuntoPGuardados);
+        localStorage.setItem("saldoPendiente", saldoPGuardado);
 
-      vistaDatosPendiente.textContent = mostrarPendiente();
+        vistaDatosPendiente.textContent = mostrarPendiente();
 
-      for (let i = clickeadoD; i < asuntosPendiente.length; i++) {
-        crearBloquePendiente(asuntosPendiente[i], saldoPendiente[i]);
-        idDeuda.push(i);
-        break;
+        for (let i = contadorPendiente; i < asuntosPendiente.length; i++) {
+          crearBloquePendiente(asuntosPendiente[i], saldoPendiente[i]);
+          idDeuda.push(i);
+          break;
+        }
+        console.log(asuntoPGuardados);
+        localStorage.setItem("idDeuda", JSON.stringify(idDeuda));
+      } else {
+        alert("No dispone de fondos suficientes");
       }
-
-      localStorage.setItem("idDeuda", JSON.stringify(idDeuda));
 
       break;
     case 2:

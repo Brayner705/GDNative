@@ -34,9 +34,9 @@
         <!------------------------PENDIENTE---------------------------->
 
         <div class="cuadro Pendiente">
-          <h3>Pendiente</h3>
+          <h3>Deben</h3>
           <h4 id="vistaPendiente">0</h4>
-          <button id="btnVer" value="pendiente">Ver mas</button>
+          <button id="btnVer" value="Pendiente">Ver mas</button>
         </div>
 
         <!-------------------------AHORRO--------------------------->
@@ -50,9 +50,9 @@
         <!------------------------DEUDA---------------------------->
 
         <div class="cuadro Deuda">
-          <h3>Deuda</h3>
+          <h3>Debo</h3>
           <h4 id="vistaDeuda">0</h4>
-          <button id="btnVer" value="deuda">Ver mas</button>
+          <button id="btnVer" value="Deuda">Ver mas</button>
         </div>
 
         <!---------------------------------------------------->
@@ -74,7 +74,7 @@
     <!------------------------Historial---------------------------->
 
     <div class="deuda" id="contenedorDeuda">
-      <h3>Deuda</h3>
+      <h3>Debo</h3>
       <div class="cajaDeuda">
         <h5>Nombre</h5>
         <h5>Monto</h5>
@@ -84,7 +84,7 @@
     </div>
 
     <div class="deuda" id="contenedorPendiente">
-      <h3>Pendiente</h3>
+      <h3>Deben</h3>
       <div class="cajaDeuda">
         <h5>Nombre</h5>
         <h5>Monto</h5>
@@ -93,14 +93,24 @@
       </div>
     </div>
 
-    <div class="historial" id="contenedorHistorial">
-      <h3>Historial</h3>
+    <div class="historial gastos" id="contenedorHistorial">
+      <h3>Ingresos</h3>
+      <div class="cajaHistorial">
+        <h5>Asunto</h5>
+        <h5>Monto</h5>
+        <h5>Fecha</h5>
+      </div>
+    </div>  
+    
+    <div class="historial" id="contenedorGastos">
+      <h3>Gastos</h3>
       <div class="cajaHistorial">
         <h5>Asunto</h5>
         <h5>Monto</h5>
         <h5>Fecha</h5>
       </div>
     </div>
+
   </body>
 
   <script src="scripts/main.js"></script>
